@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import yt_dlp
 import os
 
 app = Flask(__name__)
+CORS(app)  # Yeh line InfinityFree se connect hone ke liye zaroori hai
 
 @app.route('/')
 def home():
@@ -14,7 +16,7 @@ def download_video():
     if not url:
         return jsonify({'error': 'YouTube URL required'}), 400
 
-    # Cookies path (Wasmer ke liye)
+    # Cookies path check karein
     cookie_path = '/app/cookies.txt' if os.path.exists('/app/cookies.txt') else 'cookies.txt'
     
     ydl_opts = {
@@ -22,7 +24,8 @@ def download_video():
         'quiet': True,
         'no_warnings': True,
         'extract_flat': False,
-        'cookiefile': cookie_path
+        'cookiefile': cookie_path,
+        'nocheckcertificate': True
     }
 
     try:
@@ -30,7 +33,9 @@ def download_video():
             info = ydl.extract_info(url, download=False)
             formats = info.get('formats', [])
             
+            # Best Video (MP4) nikalne ki koshish
             best_video = next((f for f in formats if f.get('ext') == 'mp4' and f.get('vcodec') != 'none'), None)
+            # Best Audio (M4A/MP3) nikalne ki koshish
             best_audio = next((f for f in formats if f.get('acodec') != 'none' and f.get('vcodec') == 'none'), None)
 
             return jsonify({
