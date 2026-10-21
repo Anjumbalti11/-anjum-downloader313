@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6a00"/>
+      <stop offset="100%" stop-color="#c8102e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#g)"/>
+  
+  <!-- Download Arrow -->
+  <path d="M32 8 L32 26 M24 20 L32 28 L40 20" 
+        stroke="white" stroke-width="4" 
+        stroke-linecap="round" stroke-linejoin="round" 
+        fill="none"/>
+  <line x1="24" y1="32" x2="40" y2="32" 
+        stroke="white" stroke-width="4" 
+        stroke-linecap="round"/>
+  
+  <!-- Anjum Text -->
+  <text x="32" y="46" text-anchor="middle" 
+        font-family="Arial Black,Arial,sans-serif" 
+        font-size="11" font-weight="900" 
+        fill="white" letter-spacing="-0.5">Anjum</text>
+  
+  <!-- Downloader Text -->
+  <text x="32" y="58" text-anchor="middle" 
+        font-family="Arial Black,Arial,sans-serif" 
+        font-size="7" font-weight="900" 
+        fill="white" opacity="0.9" letter-spacing="-0.2">Downloader</text>
+</svg>
