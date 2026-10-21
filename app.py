@@ -14,38 +14,32 @@ def download_video():
     if not url:
         return jsonify({'error': 'YouTube URL required'}), 400
 
-    # Agar cookies file mojood hai toh use karein
-    cookie_file = 'cookies.txt'
-    cookie_path = cookie_file if os.path.exists(cookie_file) else None
-
+    # Cookies path (Wasmer ke liye)
+    cookie_path = '/app/cookies.txt' if os.path.exists('/app/cookies.txt') else 'cookies.txt'
+    
     ydl_opts = {
         'format': 'best',
         'quiet': True,
         'no_warnings': True,
-        'extract_flat': False
+        'extract_flat': False,
+        'cookiefile': cookie_path
     }
-
-    if cookie_path:
-        ydl_opts['cookiefile'] = cookie_path
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-            
-            # Direct video/audio link nikalein
             formats = info.get('formats', [])
+            
             best_video = next((f for f in formats if f.get('ext') == 'mp4' and f.get('vcodec') != 'none'), None)
-            best_audio = next((f for f in formats if f.get('ext') == 'm4a' or f.get('acodec') != 'none'), None)
+            best_audio = next((f for f in formats if f.get('acodec') != 'none' and f.get('vcodec') == 'none'), None)
 
             return jsonify({
                 'success': True,
                 'title': info.get('title'),
                 'thumbnail': info.get('thumbnail'),
                 'video_url': best_video['url'] if best_video else '',
-                'audio_url': best_audio['url'] if best_audio else '',
-                'duration': info.get('duration')
+                'audio_url': best_audio['url'] if best_audio else ''
             })
-            
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
